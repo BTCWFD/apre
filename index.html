@@ -60,7 +60,7 @@
   .btn{
     display:inline-flex;align-items:center;gap:9px;text-decoration:none;
     font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;padding:13px 22px;border:1px solid var(--emerald-line);
-    background:transparent;color:var(--ivory)
+    background:transparent;color:var(--ivory);cursor:pointer
   }
   .btn--go{background:var(--gold);border-color:var(--gold);color:#1A1200;font-weight:600}
   .btn:hover{border-color:var(--gold)}
@@ -102,12 +102,12 @@
   .markets{display:grid;grid-template-columns:repeat(5,1fr);gap:22px}
   .market{border-top:1px solid var(--emerald-line);padding-top:14px}
   .market .city{font-family:var(--serif);font-size:22px;font-weight:500}
-  .market .cc{font-size:11px;color:var(--gold);letter-spacing:.14em}
+  .market .cc{font-size:11px;color:var(--gold);letter-spacing:.14em;text-transform:uppercase}
   .market p{margin:8px 0 0;font-size:13.5px;color:var(--muted)}
 
   /* ---------- proceso ---------- */
   ol.flow{list-style:none;margin:0;padding:0;display:grid;gap:1px;background:var(--emerald-line);border-block:1px solid var(--emerald-line)}
-  ol.flow li{background:var(--black);display:grid;grid-template-columns:56px 210px 1fr;gap:20px;padding-block:19px;align-items:baseline}
+  ol.flow li{background:var(--black);display:grid;grid-template-columns:56px 210px 1fr;gap:20px;padding-block:19px;padding-inline:20px;align-items:baseline}
   ol.flow .n{font-family:var(--serif);font-size:15px;font-style:italic;color:var(--gold)}
   ol.flow .t{font-weight:500;font-size:15.5px}
   ol.flow .d{color:var(--muted);font-size:15px}
@@ -140,6 +140,7 @@
   @media (max-width:520px){
     .team{grid-template-columns:1fr}
     .markets{grid-template-columns:1fr}
+    ol.flow li{grid-template-columns:40px 1fr}
   }
 
   /* ---------- social ---------- */
@@ -147,32 +148,11 @@
   .social a{
     display:flex;align-items:center;justify-content:center;
     width:34px;height:34px;border:1px solid var(--emerald-line);
-    color:var(--muted);text-decoration:none;flex:none
+    color:var(--muted);text-decoration:none;flex:none;transition:all .2s
   }
   .social a:hover{border-color:var(--gold);color:var(--gold)}
   .social svg{width:15px;height:15px;fill:currentColor}
   .contact .social{margin-top:18px}
-
-  /* ---------- scrolly: sticky visual + scrolling copy ---------- */
-  .scrolly{display:grid;grid-template-columns:.85fr 1.15fr;gap:48px;align-items:start}
-  .scrolly-visual{position:sticky;top:92px;height:400px;border:1px solid var(--emerald-line)}
-  .viz{position:relative;width:100%;height:100%;overflow:hidden;background:var(--emerald)}
-  .viz canvas{width:100%;height:100%;display:block}
-  .viz .viz-label{position:absolute;left:16px;bottom:14px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);background:rgba(0,0,0,.4);padding:5px 9px}
-  .scrolly-copy > .spec{margin-top:0}
-
-  /* ---------- lista de mercados (columna de copy) ---------- */
-  .market-list{list-style:none;margin:0;padding:0;display:grid;gap:1px;background:var(--emerald-line);border-block:1px solid var(--emerald-line)}
-  .market-list li{background:var(--black);padding-block:18px;display:grid;grid-template-columns:52px 1fr;gap:20px;align-items:baseline}
-  .market-list .cc{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:15px}
-  .market-list .city{font-family:var(--serif);font-size:20px;font-weight:500}
-  .market-list p{margin:6px 0 0;color:var(--muted);font-size:14.5px}
-
-  @media (max-width:880px){
-    .scrolly{grid-template-columns:1fr}
-    .scrolly-visual{position:static;height:260px;margin-bottom:8px}
-  }
-  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
 </head>
@@ -180,4 +160,271 @@
 <header>
   <div class="page bar">
     <div class="mark">
-      <img src="data:image/jpeg;base64,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
+      <svg width="42" height="46" viewBox="0 0 42 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M21 2L28.5 8.5V16L21 22.5L13.5 16V8.5L21 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        <path d="M21 22.5L28.5 29V38.5L21 45L13.5 38.5V29L21 22.5Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        <circle cx="28.5" cy="16" r="1" fill="currentColor"/>
+      </svg>
+      <span class="tag">Joyería</span>
+    </div>
+    <nav>
+      <a href="#que-hacemos">Qué hacemos</a>
+      <a href="#piezas">Piezas</a>
+      <a href="#equipo">Equipo</a>
+      <a href="#mercados">Mercados</a>
+      <a href="#proceso">Proceso</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page">
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <h1>Esmeraldas <em>colombianas</em> para Asia</h1>
+      <p class="lede">Diseño, gemología, atelier y exportación en un solo equipo especializado. Desde el taller hasta el mercado internacional.</p>
+      <div class="cta">
+        <a href="#contacto" class="btn btn--go">Consultar</a>
+        <a href="#mercados" class="btn">Ver mercados</a>
+      </div>
+    </div>
+    <div class="facts">
+      <div><span>Fundación</span> <span>2019</span></div>
+      <div><span>Ubicación</span> <span>Bogotá, CO</span></div>
+      <div><span>Especialidad</span> <span>Esmeralda fina</span></div>
+      <div><span>Equipo</span> <span>6 expertos</span></div>
+    </div>
+  </section>
+
+  <!-- QUÉ HACEMOS -->
+  <section id="que-hacemos">
+    <div class="sec-head">
+      <h2>Qué hacemos</h2>
+      <p>Un equipo integral que cubre todo el proceso de la joyería fina. Desde la selección gemológica hasta la exportación a mercados premium en Asia.</p>
+    </div>
+    <div class="three">
+      <div>
+        <h3>Diseño</h3>
+        <p>Creamos piezas únicas que respetan la belleza natural de la esmeralda colombiana. Cada diseño es una propuesta personalizada para el mercado objetivo.</p>
+      </div>
+      <div>
+        <h3>Gemología</h3>
+        <p>Certificación y análisis de calidad con estándares internacionales. Garantizamos la autenticidad y el valor de cada pieza en nuestro portafolio.</p>
+      </div>
+      <div>
+        <h3>Exportación</h3>
+        <p>Gestión completa del proceso de comercio internacional. Logística, documentación y distribución hacia los principales mercados asiáticos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PIEZAS Y ESPECIFICACIONES -->
+  <section id="piezas">
+    <div class="sec-head">
+      <h2>Piezas destacadas</h2>
+      <p>Especificaciones técnicas de nuestras colecciones principales. Cada pieza cuenta con certificación gemológica completa.</p>
+    </div>
+    <div class="spec">
+      <dl>
+        <dt>Colección</dt>
+        <dd>Heritage</dd>
+        <dt>Material principal</dt>
+        <dd>Esmeralda colombiana</dd>
+        <dt>Talla</dt>
+        <dd>Personalizada</dd>
+        <dt>Certificación</dt>
+        <dd>GIA / Colombiana</dd>
+        <dt>Peso</dt>
+        <dd>2.5 - 8.0 CT</dd>
+      </dl>
+      <dl>
+        <dt>Colección</dt>
+        <dd>Contemporary</dd>
+        <dt>Acabado</dt>
+        <dd>Pulido supremo</dd>
+        <dt>Montaje</dt>
+        <dd>Oro 18K / Platino</dd>
+        <dt>Disponibilidad</dt>
+        <dd>Stock limitado</dd>
+        <dt>Plazo entrega</dt>
+        <dd>30-60 días</dd>
+      </dl>
+    </div>
+    <p class="note">Todas nuestras piezas incluyen certificado de autenticidad y trazabilidad completa de origen.</p>
+  </section>
+
+  <!-- EQUIPO -->
+  <section id="equipo">
+    <div class="sec-head">
+      <h2>Equipo experto</h2>
+      <p>Profesionales con décadas de experiencia en joyería, gemología y comercio internacional.</p>
+    </div>
+    <div class="team">
+      <div class="member">
+        <span class="part">Dirección</span>
+        <h3 class="who">Wilfredo Caro</h3>
+        <p class="role">Fundador y <b>Director Creativo</b></p>
+      </div>
+      <div class="member">
+        <span class="part">Gemología</span>
+        <h3 class="who tbd">Por confirmar</h3>
+        <p class="role"><b>Certificador GIA</b></p>
+      </div>
+      <div class="member">
+        <span class="part">Diseño</span>
+        <h3 class="who tbd">Por confirmar</h3>
+        <p class="role"><b>Diseñador Joyero</b></p>
+      </div>
+      <div class="member">
+        <span class="part">Atelier</span>
+        <h3 class="who tbd">Por confirmar</h3>
+        <p class="role"><b>Maestro Orfebre</b></p>
+      </div>
+      <div class="member">
+        <span class="part">Comercio</span>
+        <h3 class="who tbd">Por confirmar</h3>
+        <p class="role"><b>Gestor de Exportación</b></p>
+      </div>
+      <div class="member">
+        <span class="part">Mercadeo</span>
+        <h3 class="who tbd">Por confirmar</h3>
+        <p class="role"><b>Estratega de Mercados</b></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MERCADOS ASIÁTICOS -->
+  <section id="mercados">
+    <div class="sec-head">
+      <h2>Mercados prioritarios</h2>
+      <p>Nuestros principales destinos en Asia. Mercados de alto poder adquisitivo con demanda creciente de joyería fina colombiana.</p>
+    </div>
+    <div class="markets">
+      <div class="market">
+        <div class="city">Hong Kong</div>
+        <div class="cc">HK</div>
+        <p>Centro financiero y distribuidor regional para toda Asia.</p>
+      </div>
+      <div class="market">
+        <div class="city">Singapur</div>
+        <div class="cc">SG</div>
+        <p>Mercado premium con infraestructura de comercio internacional.</p>
+      </div>
+      <div class="market">
+        <div class="city">Tokio</div>
+        <div class="cc">JP</div>
+        <p>Demanda alta de piezas exclusivas y certificadas.</p>
+      </div>
+      <div class="market">
+        <div class="city">Dubái</div>
+        <div class="cc">AE</div>
+        <p>Distribuidores mayoristas y retailers de lujo.</p>
+      </div>
+      <div class="market">
+        <div class="city">Bangkok</div>
+        <div class="cc">TH</div>
+        <p>Centro regional con crecimiento sostenido en joyería.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESO DE EXPORTACIÓN -->
+  <section id="proceso">
+    <div class="sec-head">
+      <h2>Proceso de exportación</h2>
+      <p>5 pasos cuidadosamente diseñados para garantizar calidad y cumplimiento en cada etapa.</p>
+    </div>
+    <ol class="flow">
+      <li>
+        <span class="n">01</span>
+        <span class="t">Selección</span>
+        <span class="d">Identificación y evaluación de esmeraldas brutas con potencial de exportación.</span>
+      </li>
+      <li>
+        <span class="n">02</span>
+        <span class="t">Certificación</span>
+        <span class="d">Análisis gemológico completo y emisión de certificados internacionales reconocidos.</span>
+      </li>
+      <li>
+        <span class="n">03</span>
+        <span class="t">Diseño y tallado</span>
+        <span class="d">Creación de diseños personalizados o catálogo. Tallado y pulido en nuestro atelier.</span>
+      </li>
+      <li>
+        <span class="n">04</span>
+        <span class="t">Montaje</span>
+        <span class="d">Engarce en oro, platino u otros materiales nobles según especificación del cliente.</span>
+      </li>
+      <li>
+        <span class="n">05</span>
+        <span class="t">Logística</span>
+        <span class="d">Empaque seguro, gestión aduanal y envío asegurado a destino final.</span>
+      </li>
+    </ol>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto">
+    <div class="contact">
+      <div>
+        <h2>Ponte en contacto</h2>
+        <p>Somos un equipo pequeño pero experto. Respondemos personalmente cada consulta sobre nuestras piezas y servicios de exportación.</p>
+      </div>
+      <div class="cardish">
+        <p class="eyebrow">Información de contacto</p>
+        <div class="kv">
+          <div>
+            <span>Nombre</span>
+            <span>Wilfredo Caro Gacha</span>
+          </div>
+          <div>
+            <span>Email</span>
+            <span><a href="mailto:wilfredwfd86@gmail.com">wilfredwfd86@gmail.com</a></span>
+          </div>
+          <div>
+            <span>Ubicación</span>
+            <span>Bogotá, Colombia</span>
+          </div>
+          <div>
+            <span>Zona horaria</span>
+            <span>GMT-5 (COL)</span>
+          </div>
+        </div>
+        <div class="social">
+          <a href="https://instagram.com" title="Instagram" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.645.07 4.849 0 3.205-.012 3.584-.07 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/></svg>
+          </a>
+          <a href="https://twitter.com" title="Twitter" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2s9 5 20 5a9.5 9.5 0 00-9-5.5c4.75 2.25 7-7 7-7s1.08-7-7-11z"/></svg>
+          </a>
+          <a href="https://linkedin.com" title="LinkedIn" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="page" style="display:flex;width:100%;justify-content:space-between;align-items:center">
+    <div>© 2024 Apré Fine Jewelry. Todos los derechos reservados.</div>
+    <div class="foot-r">Made in Bogotá, Colombia</div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
