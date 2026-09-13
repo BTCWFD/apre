@@ -150,9 +150,28 @@
     width:34px;height:34px;border:1px solid var(--emerald-line);
     color:var(--muted);text-decoration:none;flex:none;transition:all .2s
   }
-  .social a:hover{border-color:var(--gold);color:var(--gold)}
+  .social a:hover{border-color:var(--gold);color:var(--gold);transform:scale(1.1)}
   .social svg{width:15px;height:15px;fill:currentColor}
   .contact .social{margin-top:18px}
+
+  /* ---------- animaciones ---------- */
+  @keyframes fadeInUp{
+    from{opacity:0;transform:translateY(20px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+  .fade-in{animation:fadeInUp .8s ease-out forwards;opacity:0}
+  .fade-in.visible{opacity:1}
+  section{transition:all .3s ease}
+  .three > div{transition:all .3s ease}
+  .three > div:hover{transform:translateY(-2px)}
+  .member{transition:all .3s ease}
+  .member:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(212,175,55,.15)}
+  .market{transition:all .3s ease}
+  .market:hover .city{color:var(--gold)}
+  .social a{transition:all .2s ease}
+  .social a:hover{transform:scale(1.1)}
+  .btn{transition:all .2s ease}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(212,175,55,.2)}
 </style>
 
 </head>
@@ -190,10 +209,10 @@
       </div>
     </div>
     <div class="facts">
-      <div><span>Fundación</span> <span>2019</span></div>
+      <div><span>Fundación</span> <span class="counter">2019</span></div>
       <div><span>Ubicación</span> <span>Bogotá, CO</span></div>
       <div><span>Especialidad</span> <span>Esmeralda fina</span></div>
-      <div><span>Equipo</span> <span>6 expertos</span></div>
+      <div><span>Equipo</span> <span class="counter">6</span></div>
     </div>
   </section>
 
@@ -415,6 +434,7 @@
 </footer>
 
 <script>
+// Navegación suave
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function(e) {
     e.preventDefault();
@@ -424,6 +444,79 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     }
   });
 });
+
+// Animaciones en scroll
+const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('section, .three > div, .member, .market').forEach(el => {
+  el.classList.add('fade-in');
+  observer.observe(el);
+});
+
+// Contadores animados para números
+function animateCounter(element, target, duration = 2000) {
+  let current = 0;
+  const increment = target / (duration / 16);
+  const startTime = Date.now();
+
+  const timer = setInterval(() => {
+    current += increment;
+    if (current >= target) {
+      element.textContent = target;
+      clearInterval(timer);
+    } else {
+      element.textContent = Math.floor(current);
+    }
+  }, 16);
+}
+
+// Activar contadores cuando sección es visible
+const factsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !entry.target.dataset.animated) {
+      entry.target.dataset.animated = 'true';
+      const counters = entry.target.querySelectorAll('.counter');
+      counters.forEach(counter => {
+        const value = parseInt(counter.textContent);
+        if (!isNaN(value)) {
+          counter.textContent = '0';
+          animateCounter(counter, value);
+        }
+      });
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelector('.facts') && factsObserver.observe(document.querySelector('.facts'));
+
+// Agregar estilos dinámicos para animaciones
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-in {
+    animation: fadeInUp 0.8s ease-out forwards;
+    opacity: 0;
+  }
+  .fade-in.visible {
+    opacity: 1;
+  }
+  section { transition: all 0.3s ease; }
+  .three > div, .member, .market { transition: all 0.3s ease; }
+  .member:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(212,175,55,0.15); }
+  .market:hover .city { color: var(--gold); }
+`;
+document.head.appendChild(style);
 </script>
 
 </body>
