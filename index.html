@@ -47,6 +47,17 @@
     color:var(--gold);margin:0;font-weight:500
   }
 
+  /* ---------- capas cinematográficas globales ---------- */
+  .grain-svg{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9998;opacity:.045;mix-blend-mode:overlay}
+  .vignette{position:fixed;inset:0;pointer-events:none;z-index:9997;background:radial-gradient(ellipse at 50% 38%, transparent 42%, rgba(0,0,0,.62) 100%)}
+  .ambient-light{
+    position:fixed;top:0;left:0;width:640px;height:640px;border-radius:50%;
+    pointer-events:none;z-index:1;transform:translate(-50%,-50%);
+    background:radial-gradient(circle, rgba(212,175,55,.09), transparent 68%);
+    mix-blend-mode:screen;will-change:transform;
+  }
+  @media (prefers-reduced-motion:reduce){ .ambient-light{display:none} }
+
   /* ---------- header ---------- */
   header{
     border-bottom:1px solid transparent;
@@ -74,8 +85,8 @@
   nav a:focus-visible,.btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:1px}
 
   /* ---------- hero ---------- */
-  .hero{padding-block:68px 58px;display:grid;grid-template-columns:1.3fr .7fr;gap:52px;align-items:end}
-  .hero h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,5.6vw,64px);line-height:1.06;letter-spacing:.005em}
+  .hero{padding-block:68px 58px;display:grid;grid-template-columns:1.3fr .7fr;gap:52px;align-items:end;position:relative}
+  .hero h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,5.6vw,64px);line-height:1.06;letter-spacing:.005em;will-change:clip-path}
   .hero h1 em{font-style:italic;color:var(--gold-soft)}
   .lede{margin:22px 0 0;max-width:36em;color:var(--muted);font-size:17px}
   .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
@@ -87,7 +98,13 @@
   .btn--go{background:var(--gold);border-color:var(--gold);color:#1A1200;font-weight:600}
   .btn:hover{border-color:var(--gold)}
   .btn--go:hover{background:var(--gold-soft)}
-  .facts{display:grid;gap:0;border-top:1px solid var(--emerald-line)}
+
+  .hero-stage{position:relative;min-height:400px;display:flex;align-items:flex-end}
+  .hero-gem-canvas{position:absolute;inset:-30px -8px 44px -8px;pointer-events:none}
+  .hero-gem-canvas canvas{width:100%!important;height:100%!important;display:block}
+  .gem-fallback-svg{width:100%;height:100%;display:block;filter:drop-shadow(0 22px 40px rgba(0,0,0,.55))}
+
+  .facts{display:grid;gap:0;border-top:1px solid var(--emerald-line);position:relative;z-index:1;background:rgba(0,0,0,.42);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding-inline:14px}
   .facts div{display:flex;justify-content:space-between;gap:14px;padding-block:12px;border-bottom:1px solid var(--emerald-line)}
   .facts span:first-child{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
   .facts span:last-child{font-family:var(--serif);font-size:16px;font-style:italic;color:var(--gold-soft)}
@@ -155,6 +172,7 @@
 
   @media (max-width:880px){
     .hero{grid-template-columns:1fr;gap:34px;padding-block:46px 40px}
+    .hero-stage{min-height:260px}
     .sec-head{grid-template-columns:1fr;gap:10px}
     .three{grid-template-columns:1fr;gap:24px}
     .spec{grid-template-columns:1fr}
@@ -184,7 +202,6 @@
 
   /* ---------- reveal (fallback + estado inicial para GSAP) ---------- */
   .reveal{opacity:0;transform:translateY(22px)}
-  .no-js .reveal,.reduced-motion .reveal{opacity:1;transform:none}
 
   /* ---------- cursor custom (solo desktop con mouse fino) ---------- */
   .cursor-dot,.cursor-ring,.cursor-label{
@@ -216,6 +233,15 @@
 
 </head>
 <body>
+<svg class="grain-svg" aria-hidden="true" focusable="false">
+  <filter id="grainFilter">
+    <feTurbulence id="grainTurb" type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" seed="2" result="noise"></feTurbulence>
+    <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.9 0"></feColorMatrix>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#grainFilter)"></rect>
+</svg>
+<div class="vignette" aria-hidden="true"></div>
+
 <header>
   <div class="page bar">
     <div class="mark">
@@ -244,11 +270,33 @@
         <a href="#mercados" class="btn" data-magnetic>Ver mercados</a>
       </div>
     </div>
-    <div class="facts">
-      <div><span>Fundación</span> <span class="counter">2019</span></div>
-      <div><span>Ubicación</span> <span>Bogotá, CO</span></div>
-      <div><span>Especialidad</span> <span>Esmeralda fina</span></div>
-      <div><span>Equipo</span> <span class="counter">6</span></div>
+    <div class="hero-stage">
+      <div class="hero-gem-canvas" id="heroGem" aria-hidden="true">
+        <svg class="gem-fallback-svg" viewBox="0 0 200 210" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="gemGradTop" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#E8CE7B"/>
+              <stop offset="35%" stop-color="#1E5340"/>
+              <stop offset="100%" stop-color="#0B3D2E"/>
+            </linearGradient>
+            <linearGradient id="gemGradL" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#2fe0a8" stop-opacity=".55"/>
+              <stop offset="100%" stop-color="#0B3D2E"/>
+            </linearGradient>
+          </defs>
+          <polygon points="70,42 130,42 165,78 100,98 35,78" fill="url(#gemGradTop)" stroke="#1E5340" stroke-width="0.6"/>
+          <polygon points="35,78 100,98 100,180 58,105" fill="url(#gemGradL)"/>
+          <polygon points="165,78 100,98 100,180 142,105" fill="#092c20"/>
+          <polygon points="58,105 100,98 100,180" fill="#0f6b4a" opacity="0.85"/>
+          <polygon points="142,105 100,98 100,180" fill="#082018" opacity="0.9"/>
+        </svg>
+      </div>
+      <div class="facts">
+        <div><span>Fundación</span> <span class="counter">2019</span></div>
+        <div><span>Ubicación</span> <span>Bogotá, CO</span></div>
+        <div><span>Especialidad</span> <span>Esmeralda fina</span></div>
+        <div><span>Equipo</span> <span class="counter">6</span></div>
+      </div>
     </div>
   </section>
 
@@ -492,6 +540,7 @@
       requestAnimationFrame(function raf(time){ lenis.raf(time); requestAnimationFrame(raf); });
     }
   }
+  window.__apreLenis = lenis;
 
   /* ---------- 2. Navegación suave (anclas) ---------- */
   document.querySelectorAll('a[href^="#"]').forEach(function(anchor){
@@ -512,7 +561,15 @@
     window.addEventListener('scroll', setScrolled, { passive: true });
   }
 
-  /* ---------- 4. Reveal en scroll (stagger por sección) ---------- */
+  /* ---------- 4. Grano de película animado ---------- */
+  if (!prefersReduced) {
+    var turb = document.getElementById('grainTurb');
+    if (turb) {
+      setInterval(function(){ turb.setAttribute('seed', String(Math.floor(Math.random() * 100))); }, 90);
+    }
+  }
+
+  /* ---------- 5. Reveal en scroll (stagger por sección) + título cinematográfico ---------- */
   if (hasGSAP && !prefersReduced) {
     document.querySelectorAll('section').forEach(function(sec){
       var targets = sec.querySelectorAll('.reveal');
@@ -523,10 +580,12 @@
       });
     });
 
-    /* Hero: entrada inmediata al cargar */
-    gsap.set('.hero-copy > *, .facts', { opacity: 0, y: 18 });
-    gsap.to('.hero-copy > *', { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', stagger: 0.12, delay: 0.1 });
-    gsap.to('.facts', { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', delay: 0.32 });
+    /* Hero: título con reveal tipo "cortina" (clip-path), copy con fade+rise */
+    gsap.set('.hero h1', { clipPath: 'inset(0 100% 0 0)' });
+    gsap.set('.hero-copy > *:not(h1), .facts', { opacity: 0, y: 18 });
+    gsap.to('.hero h1', { clipPath: 'inset(0 0% 0 0)', duration: 1.3, ease: 'power4.inOut', delay: 0.1 });
+    gsap.to('.hero-copy > *:not(h1)', { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', stagger: 0.12, delay: 0.55 });
+    gsap.to('.facts', { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', delay: 0.8 });
 
     /* Parallax sutil entre las dos columnas del hero */
     if (hasFinePointer) {
@@ -534,17 +593,16 @@
         yPercent: -6, ease: 'none',
         scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.6 }
       });
-      gsap.to('.facts', {
+      gsap.to('.hero-stage', {
         yPercent: 10, ease: 'none',
         scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.6 }
       });
     }
   } else {
-    /* Sin GSAP o con reduced-motion: mostrar contenido directo, sin animación */
     document.querySelectorAll('.reveal').forEach(function(el){ el.style.opacity = 1; el.style.transform = 'none'; });
   }
 
-  /* ---------- 5. Contadores animados ---------- */
+  /* ---------- 6. Contadores animados ---------- */
   function animateCounter(el, target, duration){
     duration = duration || 1400;
     var start = null;
@@ -576,16 +634,17 @@
     counterObserver.observe(factsEl);
   }
 
-  /* ---------- 6. Cursor custom + magnetic buttons (solo desktop, sin reduced-motion) ---------- */
+  /* ---------- 7. Cursor custom + luz ambiental + magnetic buttons ---------- */
   if (hasGSAP && hasFinePointer && !prefersReduced) {
     document.body.classList.add('has-custom-cursor');
 
     var dot = document.createElement('div'); dot.className = 'cursor-dot';
     var ring = document.createElement('div'); ring.className = 'cursor-ring';
     var label = document.createElement('div'); label.className = 'cursor-label';
-    document.body.append(ring, dot, label);
+    var ambient = document.createElement('div'); ambient.className = 'ambient-light';
+    document.body.append(ambient, ring, dot, label);
 
-    gsap.set([dot, ring, label], { xPercent: -50, yPercent: -50 });
+    gsap.set([dot, ring, label, ambient], { xPercent: -50, yPercent: -50 });
 
     var dotX = gsap.quickTo(dot, 'x', { duration: 0.08, ease: 'power3' });
     var dotY = gsap.quickTo(dot, 'y', { duration: 0.08, ease: 'power3' });
@@ -593,11 +652,14 @@
     var ringY = gsap.quickTo(ring, 'y', { duration: 0.45, ease: 'power3' });
     var labelX = gsap.quickTo(label, 'x', { duration: 0.45, ease: 'power3' });
     var labelY = gsap.quickTo(label, 'y', { duration: 0.45, ease: 'power3' });
+    var ambX = gsap.quickTo(ambient, 'x', { duration: 0.65, ease: 'power3' });
+    var ambY = gsap.quickTo(ambient, 'y', { duration: 0.65, ease: 'power3' });
 
     window.addEventListener('mousemove', function(e){
       dotX(e.clientX); dotY(e.clientY);
       ringX(e.clientX); ringY(e.clientY);
       labelX(e.clientX); labelY(e.clientY);
+      ambX(e.clientX); ambY(e.clientY);
     });
 
     document.querySelectorAll('a, button, .btn').forEach(function(el){
@@ -631,6 +693,122 @@
       });
     });
   }
+})();
+</script>
+
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+<script type="module">
+import * as THREE from 'three';
+
+(function(){
+  var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hasFinePointer = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var container = document.getElementById('heroGem');
+
+  /* En touch/mobile o con reduced-motion se conserva la gema SVG estática (ya en el HTML) */
+  if (!container || prefersReduced || !hasFinePointer) return;
+
+  var renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
+  } catch (e) { return; }
+
+  var fallbackSvg = container.querySelector('.gem-fallback-svg');
+  if (fallbackSvg) fallbackSvg.remove();
+
+  function getSize(){
+    var r = container.getBoundingClientRect();
+    return { w: r.width || 380, h: r.height || 420 };
+  }
+  var sz = getSize();
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(sz.w, sz.h);
+  renderer.setClearColor(0x000000, 0);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.3;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  container.appendChild(renderer.domElement);
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(32, sz.w / sz.h, 0.1, 100);
+  camera.position.set(0, -0.15, 5.6);
+  camera.lookAt(0, -0.55, 0);
+
+  scene.add(new THREE.AmbientLight(0x2a6b53, 2.5));
+  var key = new THREE.PointLight(0xE8CE7B, 220, 0, 2); key.position.set(3, 4, 5); scene.add(key);
+  var rim = new THREE.PointLight(0x2fe0a8, 140, 0, 2); rim.position.set(-4, -2, -3); scene.add(rim);
+  var fillL = new THREE.PointLight(0xffffff, 60, 0, 2); fillL.position.set(-2, 3, 4); scene.add(fillL);
+  var back = new THREE.PointLight(0xD4AF37, 90, 0, 2); back.position.set(0, -3, -5); scene.add(back);
+
+  var segments = 8;
+  var crown = new THREE.CylinderGeometry(0.5, 1.0, 0.42, segments, 1, false);
+  crown.translate(0, 0.21, 0);
+  var pavilion = new THREE.ConeGeometry(1.0, 1.95, segments, 1, false);
+  pavilion.rotateX(Math.PI);
+  pavilion.rotateY(Math.PI / segments);
+  pavilion.translate(0, -0.975, 0);
+
+  var material = new THREE.MeshPhysicalMaterial({
+    color: 0x0f6b4a,
+    metalness: 0.05,
+    roughness: 0.12,
+    clearcoat: 1,
+    clearcoatRoughness: 0.08,
+    transmission: 0.35,
+    thickness: 1.2,
+    ior: 1.58,
+    emissive: 0x04261b,
+    emissiveIntensity: 0.5,
+    flatShading: true,
+    side: THREE.DoubleSide
+  });
+
+  var gem = new THREE.Group();
+  gem.add(new THREE.Mesh(crown, material));
+  gem.add(new THREE.Mesh(pavilion, material));
+  var baseTiltX = THREE.MathUtils.degToRad(-6);
+  var baseRotY = THREE.MathUtils.degToRad(35);
+  gem.rotation.x = baseTiltX;
+  gem.rotation.y = baseRotY;
+  scene.add(gem);
+
+  var targetTiltX = 0, targetTiltY = 0, curTiltX = 0, curTiltY = 0, rotY = 0;
+  window.addEventListener('mousemove', function(e){
+    var r = container.getBoundingClientRect();
+    targetTiltY = ((e.clientX - r.left) / Math.max(r.width, 1) - 0.5) * 0.5;
+    targetTiltX = ((e.clientY - r.top) / Math.max(r.height, 1) - 0.5) * 0.35;
+  });
+
+  var visible = true;
+  var io = new IntersectionObserver(function(entries){ visible = entries[0].isIntersecting; }, { threshold: 0 });
+  io.observe(container);
+
+  window.addEventListener('resize', function(){
+    var s = getSize();
+    camera.aspect = s.w / s.h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(s.w, s.h);
+  });
+
+  if (window.gsap && window.ScrollTrigger) {
+    gsap.to(camera.position, {
+      z: 7.4, y: 0.3, ease: 'none',
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.6 }
+    });
+  }
+
+  (function animate(){
+    requestAnimationFrame(animate);
+    if (!visible) return;
+    rotY += 0.0032;
+    curTiltX += (targetTiltX - curTiltX) * 0.045;
+    curTiltY += (targetTiltY - curTiltY) * 0.045;
+    gem.rotation.y = baseRotY + rotY + curTiltY;
+    gem.rotation.x = baseTiltX + curTiltX;
+    renderer.render(scene, camera);
+  })();
 })();
 </script>
 
