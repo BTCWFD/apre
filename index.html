@@ -27,6 +27,7 @@
     --wrap:1100px;
   }
   *{box-sizing:border-box}
+  html{scroll-behavior:auto}
   body{
     margin:0;
     background:var(--black);
@@ -36,6 +37,7 @@
     font-size:16px;
     line-height:1.65;
     -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
   }
   .page{max-width:var(--wrap);margin:0 auto;padding-inline:20px;padding-block:0}
   a{color:inherit}
@@ -46,14 +48,29 @@
   }
 
   /* ---------- header ---------- */
-  header{border-bottom:1px solid var(--emerald-line)}
+  header{
+    border-bottom:1px solid transparent;
+    position:sticky;top:0;z-index:100;
+    background:rgba(0,0,0,.4);
+    backdrop-filter:blur(0px);
+    -webkit-backdrop-filter:blur(0px);
+    transition:background .4s ease,border-color .4s ease,backdrop-filter .4s ease;
+  }
+  header.is-scrolled{
+    background:rgba(0,0,0,.86);
+    border-bottom-color:var(--emerald-line);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+  }
   .bar{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-block:16px;flex-wrap:wrap}
   .mark{display:flex;align-items:center;gap:12px}
   .mark img{height:46px;width:auto;display:block}
   .mark .tag{font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);border-left:1px solid var(--emerald-line);padding-left:12px}
   nav{display:flex;gap:24px;flex-wrap:wrap}
-  nav a{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding-block:4px}
+  nav a{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding-block:4px;position:relative}
+  nav a::after{content:"";position:absolute;left:0;right:100%;bottom:-2px;height:1px;background:var(--gold);transition:right .35s cubic-bezier(.22,1,.36,1)}
   nav a:hover{color:var(--ivory)}
+  nav a:hover::after{right:0}
   nav a:focus-visible,.btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:1px}
 
   /* ---------- hero ---------- */
@@ -65,7 +82,7 @@
   .btn{
     display:inline-flex;align-items:center;gap:9px;text-decoration:none;
     font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;padding:13px 22px;border:1px solid var(--emerald-line);
-    background:transparent;color:var(--ivory);cursor:pointer
+    background:transparent;color:var(--ivory);cursor:pointer;will-change:transform;
   }
   .btn--go{background:var(--gold);border-color:var(--gold);color:#1A1200;font-weight:600}
   .btn:hover{border-color:var(--gold)}
@@ -84,19 +101,21 @@
   .three{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
   .three h3{font-family:var(--serif);font-size:21px;font-weight:500;margin-bottom:8px}
   .three p{margin:0;color:var(--muted);font-size:15px}
-  .three > div{padding-top:18px;border-top:1px solid var(--gold)}
+  .three > div{padding-top:18px;border-top:1px solid var(--gold);transition:transform .35s ease}
+  .three > div:hover{transform:translateY(-3px)}
 
   /* ---------- especificaciones ---------- */
   .spec{display:grid;grid-template-columns:repeat(2,1fr);gap:0 40px}
   .spec dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:0}
-  .spec dt,.spec dd{padding-block:13px;border-bottom:1px solid var(--emerald-line);margin:0}
+  .spec dt,.spec dd{padding-block:13px;border-bottom:1px solid var(--emerald-line);margin:0;transition:border-color .25s ease}
   .spec dt{font-size:14.5px;color:var(--muted)}
   .spec dd{font-family:var(--serif);font-size:16px;font-style:italic;text-align:right;color:var(--gold-soft)}
   .note{margin:22px 0 0;font-size:13.5px;color:var(--muted)}
 
   /* ---------- equipo ---------- */
   .team{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--emerald-line);border:1px solid var(--emerald-line)}
-  .member{background:var(--emerald);padding:24px 22px 22px;display:flex;flex-direction:column;gap:8px;min-height:176px}
+  .member{background:var(--emerald);padding:24px 22px 22px;display:flex;flex-direction:column;gap:8px;min-height:176px;transition:transform .35s ease,box-shadow .35s ease,background .35s ease}
+  .member:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(0,0,0,.4);background:var(--emerald-soft)}
   .member .part{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
   .member .who{font-family:var(--serif);font-size:24px;font-weight:500;line-height:1.15}
   .member .who.tbd{color:var(--muted);font-style:italic}
@@ -105,14 +124,17 @@
 
   /* ---------- mercados ---------- */
   .markets{display:grid;grid-template-columns:repeat(5,1fr);gap:22px}
-  .market{border-top:1px solid var(--emerald-line);padding-top:14px}
-  .market .city{font-family:var(--serif);font-size:22px;font-weight:500}
+  .market{border-top:1px solid var(--emerald-line);padding-top:14px;transition:transform .35s ease,border-color .35s ease}
+  .market:hover{transform:translateY(-3px);border-color:var(--gold)}
+  .market .city{font-family:var(--serif);font-size:22px;font-weight:500;transition:color .25s ease}
   .market .cc{font-size:11px;color:var(--gold);letter-spacing:.14em;text-transform:uppercase}
   .market p{margin:8px 0 0;font-size:13.5px;color:var(--muted)}
+  .market:hover .city{color:var(--gold)}
 
   /* ---------- proceso ---------- */
   ol.flow{list-style:none;margin:0;padding:0;display:grid;gap:1px;background:var(--emerald-line);border-block:1px solid var(--emerald-line)}
-  ol.flow li{background:var(--black);display:grid;grid-template-columns:56px 210px 1fr;gap:20px;padding-block:19px;padding-inline:20px;align-items:baseline}
+  ol.flow li{background:var(--black);display:grid;grid-template-columns:56px 210px 1fr;gap:20px;padding-block:19px;padding-inline:20px;align-items:baseline;transition:background .25s ease}
+  ol.flow li:hover{background:var(--emerald-soft)}
   ol.flow .n{font-family:var(--serif);font-size:15px;font-style:italic;color:var(--gold)}
   ol.flow .t{font-weight:500;font-size:15.5px}
   ol.flow .d{color:var(--muted);font-size:15px}
@@ -153,30 +175,43 @@
   .social a{
     display:flex;align-items:center;justify-content:center;
     width:34px;height:34px;border:1px solid var(--emerald-line);
-    color:var(--muted);text-decoration:none;flex:none;transition:all .2s
+    color:var(--muted);text-decoration:none;flex:none;transition:border-color .25s ease,color .25s ease;
+    will-change:transform;
   }
-  .social a:hover{border-color:var(--gold);color:var(--gold);transform:scale(1.1)}
+  .social a:hover{border-color:var(--gold);color:var(--gold)}
   .social svg{width:15px;height:15px;fill:currentColor}
   .contact .social{margin-top:18px}
 
-  /* ---------- animaciones ---------- */
-  @keyframes fadeInUp{
-    from{opacity:0;transform:translateY(20px)}
-    to{opacity:1;transform:translateY(0)}
+  /* ---------- reveal (fallback + estado inicial para GSAP) ---------- */
+  .reveal{opacity:0;transform:translateY(22px)}
+  .no-js .reveal,.reduced-motion .reveal{opacity:1;transform:none}
+
+  /* ---------- cursor custom (solo desktop con mouse fino) ---------- */
+  .cursor-dot,.cursor-ring,.cursor-label{
+    position:fixed;top:0;left:0;pointer-events:none;z-index:9999;
+    border-radius:50%;will-change:transform;
   }
-  .fade-in{animation:fadeInUp .8s ease-out forwards;opacity:0}
-  .fade-in.visible{opacity:1}
-  section{transition:all .3s ease}
-  .three > div{transition:all .3s ease}
-  .three > div:hover{transform:translateY(-2px)}
-  .member{transition:all .3s ease}
-  .member:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(212,175,55,.15)}
-  .market{transition:all .3s ease}
-  .market:hover .city{color:var(--gold)}
-  .social a{transition:all .2s ease}
-  .social a:hover{transform:scale(1.1)}
-  .btn{transition:all .2s ease}
-  .btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(212,175,55,.2)}
+  .cursor-dot{width:6px;height:6px;background:var(--gold-soft)}
+  .cursor-ring{
+    width:34px;height:34px;border:1px solid var(--gold);
+    transition:width .28s ease,height .28s ease,border-color .28s ease,background-color .28s ease,opacity .28s ease;
+  }
+  .cursor-ring.is-hover{width:60px;height:60px;background:rgba(212,175,55,.1)}
+  .cursor-ring.is-label{width:88px;height:88px;background:var(--gold);border-color:var(--gold);opacity:.96}
+  .cursor-label{
+    border-radius:20px;width:auto;height:auto;padding:0;
+    font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;
+    color:var(--black);white-space:nowrap;opacity:0;transition:opacity .2s ease;
+  }
+  body.has-custom-cursor,body.has-custom-cursor a,body.has-custom-cursor button,body.has-custom-cursor .btn{cursor:none}
+  @media (hover:none),(pointer:coarse){
+    .cursor-dot,.cursor-ring,.cursor-label{display:none!important}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition-duration:.01ms!important;animation-duration:.01ms!important}
+    .cursor-dot,.cursor-ring,.cursor-label{display:none!important}
+  }
 </style>
 
 </head>
@@ -200,13 +235,13 @@
 
 <div class="page">
   <!-- HERO -->
-  <section class="hero">
-    <div>
+  <section class="hero" style="border-top:none">
+    <div class="hero-copy">
       <h1>Esmeraldas <em>colombianas</em> para Asia</h1>
       <p class="lede">Diseño, gemología, atelier y exportación en un solo equipo especializado. Desde el taller hasta el mercado internacional.</p>
       <div class="cta">
-        <a href="#contacto" class="btn btn--go">Consultar</a>
-        <a href="#mercados" class="btn">Ver mercados</a>
+        <a href="#contacto" class="btn btn--go" data-magnetic>Consultar</a>
+        <a href="#mercados" class="btn" data-magnetic>Ver mercados</a>
       </div>
     </div>
     <div class="facts">
@@ -219,20 +254,20 @@
 
   <!-- QUÉ HACEMOS -->
   <section id="que-hacemos">
-    <div class="sec-head">
+    <div class="sec-head reveal">
       <h2>Qué hacemos</h2>
       <p>Un equipo integral que cubre todo el proceso de la joyería fina. Desde la selección gemológica hasta la exportación a mercados premium en Asia.</p>
     </div>
     <div class="three">
-      <div>
+      <div class="reveal">
         <h3>Diseño</h3>
         <p>Creamos piezas únicas que respetan la belleza natural de la esmeralda colombiana. Cada diseño es una propuesta personalizada para el mercado objetivo.</p>
       </div>
-      <div>
+      <div class="reveal">
         <h3>Gemología</h3>
         <p>Certificación y análisis de calidad con estándares internacionales. Garantizamos la autenticidad y el valor de cada pieza en nuestro portafolio.</p>
       </div>
-      <div>
+      <div class="reveal">
         <h3>Exportación</h3>
         <p>Gestión completa del proceso de comercio internacional. Logística, documentación y distribución hacia los principales mercados asiáticos.</p>
       </div>
@@ -241,12 +276,12 @@
 
   <!-- PIEZAS Y ESPECIFICACIONES -->
   <section id="piezas">
-    <div class="sec-head">
+    <div class="sec-head reveal">
       <h2>Piezas destacadas</h2>
       <p>Especificaciones técnicas de nuestras colecciones principales. Cada pieza cuenta con certificación gemológica completa.</p>
     </div>
     <div class="spec">
-      <dl>
+      <dl class="reveal">
         <dt>Colección</dt>
         <dd>Heritage</dd>
         <dt>Material principal</dt>
@@ -258,7 +293,7 @@
         <dt>Peso</dt>
         <dd>2.5 - 8.0 CT</dd>
       </dl>
-      <dl>
+      <dl class="reveal">
         <dt>Colección</dt>
         <dd>Contemporary</dd>
         <dt>Acabado</dt>
@@ -276,37 +311,37 @@
 
   <!-- EQUIPO -->
   <section id="equipo">
-    <div class="sec-head">
+    <div class="sec-head reveal">
       <h2>Equipo experto</h2>
       <p>Profesionales con décadas de experiencia en joyería, gemología y comercio internacional.</p>
     </div>
     <div class="team">
-      <div class="member">
+      <div class="member reveal" data-cursor-label="Fundador">
         <span class="part">Dirección</span>
         <h3 class="who">Wilfredo Caro</h3>
         <p class="role">Fundador y <b>Director Creativo</b></p>
       </div>
-      <div class="member">
+      <div class="member reveal" data-cursor-label="Por confirmar">
         <span class="part">Gemología</span>
         <h3 class="who tbd">Por confirmar</h3>
         <p class="role"><b>Certificador GIA</b></p>
       </div>
-      <div class="member">
+      <div class="member reveal" data-cursor-label="Por confirmar">
         <span class="part">Diseño</span>
         <h3 class="who tbd">Por confirmar</h3>
         <p class="role"><b>Diseñador Joyero</b></p>
       </div>
-      <div class="member">
+      <div class="member reveal" data-cursor-label="Por confirmar">
         <span class="part">Atelier</span>
         <h3 class="who tbd">Por confirmar</h3>
         <p class="role"><b>Maestro Orfebre</b></p>
       </div>
-      <div class="member">
+      <div class="member reveal" data-cursor-label="Por confirmar">
         <span class="part">Comercio</span>
         <h3 class="who tbd">Por confirmar</h3>
         <p class="role"><b>Gestor de Exportación</b></p>
       </div>
-      <div class="member">
+      <div class="member reveal" data-cursor-label="Por confirmar">
         <span class="part">Mercadeo</span>
         <h3 class="who tbd">Por confirmar</h3>
         <p class="role"><b>Estratega de Mercados</b></p>
@@ -316,32 +351,32 @@
 
   <!-- MERCADOS ASIÁTICOS -->
   <section id="mercados">
-    <div class="sec-head">
+    <div class="sec-head reveal">
       <h2>Mercados prioritarios</h2>
       <p>Nuestros principales destinos en Asia. Mercados de alto poder adquisitivo con demanda creciente de joyería fina colombiana.</p>
     </div>
     <div class="markets">
-      <div class="market">
+      <div class="market reveal" data-cursor-label="Explorar">
         <div class="city">Hong Kong</div>
         <div class="cc">HK</div>
         <p>Centro financiero y distribuidor regional para toda Asia.</p>
       </div>
-      <div class="market">
+      <div class="market reveal" data-cursor-label="Explorar">
         <div class="city">Singapur</div>
         <div class="cc">SG</div>
         <p>Mercado premium con infraestructura de comercio internacional.</p>
       </div>
-      <div class="market">
+      <div class="market reveal" data-cursor-label="Explorar">
         <div class="city">Tokio</div>
         <div class="cc">JP</div>
         <p>Demanda alta de piezas exclusivas y certificadas.</p>
       </div>
-      <div class="market">
+      <div class="market reveal" data-cursor-label="Explorar">
         <div class="city">Dubái</div>
         <div class="cc">AE</div>
         <p>Distribuidores mayoristas y retailers de lujo.</p>
       </div>
-      <div class="market">
+      <div class="market reveal" data-cursor-label="Explorar">
         <div class="city">Bangkok</div>
         <div class="cc">TH</div>
         <p>Centro regional con crecimiento sostenido en joyería.</p>
@@ -351,32 +386,32 @@
 
   <!-- PROCESO DE EXPORTACIÓN -->
   <section id="proceso">
-    <div class="sec-head">
+    <div class="sec-head reveal">
       <h2>Proceso de exportación</h2>
       <p>5 pasos cuidadosamente diseñados para garantizar calidad y cumplimiento en cada etapa.</p>
     </div>
     <ol class="flow">
-      <li>
+      <li class="reveal">
         <span class="n">01</span>
         <span class="t">Selección</span>
         <span class="d">Identificación y evaluación de esmeraldas brutas con potencial de exportación.</span>
       </li>
-      <li>
+      <li class="reveal">
         <span class="n">02</span>
         <span class="t">Certificación</span>
         <span class="d">Análisis gemológico completo y emisión de certificados internacionales reconocidos.</span>
       </li>
-      <li>
+      <li class="reveal">
         <span class="n">03</span>
         <span class="t">Diseño y tallado</span>
         <span class="d">Creación de diseños personalizados o catálogo. Tallado y pulido en nuestro atelier.</span>
       </li>
-      <li>
+      <li class="reveal">
         <span class="n">04</span>
         <span class="t">Montaje</span>
         <span class="d">Engarce en oro, platino u otros materiales nobles según especificación del cliente.</span>
       </li>
-      <li>
+      <li class="reveal">
         <span class="n">05</span>
         <span class="t">Logística</span>
         <span class="d">Empaque seguro, gestión aduanal y envío asegurado a destino final.</span>
@@ -387,11 +422,11 @@
   <!-- CONTACTO -->
   <section id="contacto">
     <div class="contact">
-      <div>
+      <div class="reveal">
         <h2>Ponte en contacto</h2>
         <p>Somos un equipo pequeño pero experto. Respondemos personalmente cada consulta sobre nuestras piezas y servicios de exportación.</p>
       </div>
-      <div class="cardish">
+      <div class="cardish reveal">
         <p class="eyebrow">Información de contacto</p>
         <div class="kv">
           <div>
@@ -412,13 +447,13 @@
           </div>
         </div>
         <div class="social">
-          <a href="https://instagram.com" title="Instagram" target="_blank">
+          <a href="https://instagram.com" title="Instagram" target="_blank" data-magnetic data-magnetic-strength="0.5">
             <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.645.07 4.849 0 3.205-.012 3.584-.07 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/></svg>
           </a>
-          <a href="https://twitter.com" title="Twitter" target="_blank">
+          <a href="https://twitter.com" title="Twitter" target="_blank" data-magnetic data-magnetic-strength="0.5">
             <svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2s9 5 20 5a9.5 9.5 0 00-9-5.5c4.75 2.25 7-7 7-7s1.08-7-7-11z"/></svg>
           </a>
-          <a href="https://linkedin.com" title="LinkedIn" target="_blank">
+          <a href="https://linkedin.com" title="LinkedIn" target="_blank" data-magnetic data-magnetic-strength="0.5">
             <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
           </a>
         </div>
@@ -434,90 +469,169 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
 <script>
-// Navegación suave
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
-    e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
-    }
-  });
-});
+(function(){
+  var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hasFinePointer = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var hasGSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
 
-// Animaciones en scroll
-const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
-    }
-  });
-}, observerOptions);
+  if (hasGSAP) gsap.registerPlugin(ScrollTrigger);
 
-document.querySelectorAll('section, .three > div, .member, .market').forEach(el => {
-  el.classList.add('fade-in');
-  observer.observe(el);
-});
-
-// Contadores animados para números
-function animateCounter(element, target, duration = 2000) {
-  let current = 0;
-  const increment = target / (duration / 16);
-  const startTime = Date.now();
-
-  const timer = setInterval(() => {
-    current += increment;
-    if (current >= target) {
-      element.textContent = target;
-      clearInterval(timer);
+  /* ---------- 1. Smooth scroll (Lenis) ---------- */
+  var lenis = null;
+  if (!prefersReduced && typeof Lenis !== 'undefined') {
+    lenis = new Lenis({ duration: 1.05, easing: function(t){ return Math.min(1, 1.001 - Math.pow(2, -10 * t)); } });
+    if (hasGSAP) {
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add(function(time){ lenis.raf(time * 1000); });
+      gsap.ticker.lagSmoothing(0);
     } else {
-      element.textContent = Math.floor(current);
+      requestAnimationFrame(function raf(time){ lenis.raf(time); requestAnimationFrame(raf); });
     }
-  }, 16);
-}
+  }
 
-// Activar contadores cuando sección es visible
-const factsObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting && !entry.target.dataset.animated) {
-      entry.target.dataset.animated = 'true';
-      const counters = entry.target.querySelectorAll('.counter');
-      counters.forEach(counter => {
-        const value = parseInt(counter.textContent);
-        if (!isNaN(value)) {
-          counter.textContent = '0';
-          animateCounter(counter, value);
-        }
+  /* ---------- 2. Navegación suave (anclas) ---------- */
+  document.querySelectorAll('a[href^="#"]').forEach(function(anchor){
+    anchor.addEventListener('click', function(e){
+      var target = document.querySelector(this.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      if (lenis) lenis.scrollTo(target, { offset: -76 });
+      else target.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth' });
+    });
+  });
+
+  /* ---------- 3. Header sticky con blur al hacer scroll ---------- */
+  var header = document.querySelector('header');
+  if (header) {
+    var setScrolled = function(){ header.classList.toggle('is-scrolled', window.scrollY > 24); };
+    setScrolled();
+    window.addEventListener('scroll', setScrolled, { passive: true });
+  }
+
+  /* ---------- 4. Reveal en scroll (stagger por sección) ---------- */
+  if (hasGSAP && !prefersReduced) {
+    document.querySelectorAll('section').forEach(function(sec){
+      var targets = sec.querySelectorAll('.reveal');
+      if (!targets.length) return;
+      gsap.to(targets, {
+        opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', stagger: 0.08,
+        scrollTrigger: { trigger: sec, start: 'top 78%', once: true }
+      });
+    });
+
+    /* Hero: entrada inmediata al cargar */
+    gsap.set('.hero-copy > *, .facts', { opacity: 0, y: 18 });
+    gsap.to('.hero-copy > *', { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', stagger: 0.12, delay: 0.1 });
+    gsap.to('.facts', { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', delay: 0.32 });
+
+    /* Parallax sutil entre las dos columnas del hero */
+    if (hasFinePointer) {
+      gsap.to('.hero-copy', {
+        yPercent: -6, ease: 'none',
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.6 }
+      });
+      gsap.to('.facts', {
+        yPercent: 10, ease: 'none',
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.6 }
       });
     }
-  });
-}, { threshold: 0.5 });
+  } else {
+    /* Sin GSAP o con reduced-motion: mostrar contenido directo, sin animación */
+    document.querySelectorAll('.reveal').forEach(function(el){ el.style.opacity = 1; el.style.transform = 'none'; });
+  }
 
-document.querySelector('.facts') && factsObserver.observe(document.querySelector('.facts'));
+  /* ---------- 5. Contadores animados ---------- */
+  function animateCounter(el, target, duration){
+    duration = duration || 1400;
+    var start = null;
+    function step(ts){
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / duration, 1);
+      el.textContent = Math.floor(p * target);
+      if (p < 1) requestAnimationFrame(step); else el.textContent = target;
+    }
+    requestAnimationFrame(step);
+  }
+  var factsEl = document.querySelector('.facts');
+  if (factsEl) {
+    var counterObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting && !entry.target.dataset.animated) {
+          entry.target.dataset.animated = 'true';
+          entry.target.querySelectorAll('.counter').forEach(function(counter){
+            var value = parseInt(counter.textContent, 10);
+            if (!isNaN(value)) {
+              if (prefersReduced) { counter.textContent = value; return; }
+              counter.textContent = '0';
+              animateCounter(counter, value);
+            }
+          });
+        }
+      });
+    }, { threshold: 0.5 });
+    counterObserver.observe(factsEl);
+  }
 
-// Agregar estilos dinámicos para animaciones
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+  /* ---------- 6. Cursor custom + magnetic buttons (solo desktop, sin reduced-motion) ---------- */
+  if (hasGSAP && hasFinePointer && !prefersReduced) {
+    document.body.classList.add('has-custom-cursor');
+
+    var dot = document.createElement('div'); dot.className = 'cursor-dot';
+    var ring = document.createElement('div'); ring.className = 'cursor-ring';
+    var label = document.createElement('div'); label.className = 'cursor-label';
+    document.body.append(ring, dot, label);
+
+    gsap.set([dot, ring, label], { xPercent: -50, yPercent: -50 });
+
+    var dotX = gsap.quickTo(dot, 'x', { duration: 0.08, ease: 'power3' });
+    var dotY = gsap.quickTo(dot, 'y', { duration: 0.08, ease: 'power3' });
+    var ringX = gsap.quickTo(ring, 'x', { duration: 0.45, ease: 'power3' });
+    var ringY = gsap.quickTo(ring, 'y', { duration: 0.45, ease: 'power3' });
+    var labelX = gsap.quickTo(label, 'x', { duration: 0.45, ease: 'power3' });
+    var labelY = gsap.quickTo(label, 'y', { duration: 0.45, ease: 'power3' });
+
+    window.addEventListener('mousemove', function(e){
+      dotX(e.clientX); dotY(e.clientY);
+      ringX(e.clientX); ringY(e.clientY);
+      labelX(e.clientX); labelY(e.clientY);
+    });
+
+    document.querySelectorAll('a, button, .btn').forEach(function(el){
+      el.addEventListener('mouseenter', function(){ ring.classList.add('is-hover'); });
+      el.addEventListener('mouseleave', function(){ ring.classList.remove('is-hover'); });
+    });
+
+    document.querySelectorAll('[data-cursor-label]').forEach(function(el){
+      el.addEventListener('mouseenter', function(){
+        ring.classList.add('is-label');
+        label.textContent = el.dataset.cursorLabel;
+        label.style.opacity = 1;
+      });
+      el.addEventListener('mouseleave', function(){
+        ring.classList.remove('is-label');
+        label.style.opacity = 0;
+      });
+    });
+
+    /* Magnetic buttons */
+    document.querySelectorAll('[data-magnetic]').forEach(function(el){
+      var strength = parseFloat(el.dataset.magneticStrength || '0.35');
+      el.addEventListener('mousemove', function(e){
+        var r = el.getBoundingClientRect();
+        var x = e.clientX - r.left - r.width / 2;
+        var y = e.clientY - r.top - r.height / 2;
+        gsap.to(el, { x: x * strength, y: y * strength, duration: 0.35, ease: 'power3.out' });
+      });
+      el.addEventListener('mouseleave', function(){
+        gsap.to(el, { x: 0, y: 0, duration: 0.55, ease: 'elastic.out(1, 0.4)' });
+      });
+    });
   }
-  .fade-in {
-    animation: fadeInUp 0.8s ease-out forwards;
-    opacity: 0;
-  }
-  .fade-in.visible {
-    opacity: 1;
-  }
-  section { transition: all 0.3s ease; }
-  .three > div, .member, .market { transition: all 0.3s ease; }
-  .member:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(212,175,55,0.15); }
-  .market:hover .city { color: var(--gold); }
-`;
-document.head.appendChild(style);
+})();
 </script>
 
 </body>
