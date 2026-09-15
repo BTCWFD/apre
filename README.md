@@ -26,4 +26,4 @@ https://btcwfd.github.io/apre/
 
 ## Contacto
 
-Wilfredo Caro Gacha — wilfredwfd86@gmail.com
+Andrés Felipe Pulido Ruiz — theandres0707@gmail.com — (+57) 3044999075
