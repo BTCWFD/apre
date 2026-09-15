@@ -47,6 +47,18 @@
     color:var(--gold);margin:0;font-weight:500
   }
 
+  
+  /* ---------- language switcher & shipping banner ---------- */
+  .lang-switch { display: flex; gap: 8px; margin-left: auto; align-items: center; }
+  .lang-switch button { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px; transition: color 0.3s; }
+  .lang-switch button.active { color: var(--gold); font-weight: 500; }
+  [lang="en"] { display: none; }
+  body.lang-en [lang="es"] { display: none; }
+  body.lang-en [lang="en"] { display: block; }
+  span[lang] { display: inline; }
+  body.lang-en span[lang="en"] { display: inline; }
+  .shipping-banner { background: var(--emerald-line); color: var(--gold-soft); text-align: center; font-size: 11.5px; letter-spacing: 0.1em; padding: 6px; text-transform: uppercase; font-weight: 500; }
+
   /* ---------- capas cinematográficas globales ---------- */
   .grain-svg{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9998;opacity:.045;mix-blend-mode:overlay}
   .vignette{position:fixed;inset:0;pointer-events:none;z-index:9997;background:radial-gradient(ellipse at 50% 38%, transparent 42%, rgba(0,0,0,.62) 100%)}
@@ -237,6 +249,11 @@
 
 </head>
 <body>
+
+<div class="shipping-banner">
+  <span lang="es">Envíos internacionales asegurados (FedEx/Brink's) &bull; Esmeraldas Certificadas</span>
+  <span lang="en">Worldwide Insured Shipping (FedEx/Brink's) &bull; Certified Emeralds</span>
+</div>
 <svg class="grain-svg" aria-hidden="true" focusable="false">
   <filter id="grainFilter">
     <feTurbulence id="grainTurb" type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" seed="2" result="noise"></feTurbulence>
@@ -267,7 +284,7 @@
   <!-- HERO -->
   <section class="hero" style="border-top:none">
     <div class="hero-copy">
-      <h1>Esmeraldas <em>colombianas</em> para Asia</h1>
+      <h1><span lang="es">Esmeraldas <em>colombianas</em> para Asia</span><span lang="en"><em>Colombian</em> Emeralds for Asia</span></h1>
       <p class="lede">Diseño, gemología, atelier y exportación en un solo equipo especializado. Desde el taller hasta el mercado internacional.</p>
       <div class="cta">
         <a href="#contacto" class="btn btn--go" data-magnetic>Consultar</a>
@@ -297,20 +314,20 @@
   <!-- QUÉ HACEMOS -->
   <section id="que-hacemos">
     <div class="sec-head reveal">
-      <h2>Qué hacemos</h2>
+      <h2><span lang="es">Qué hacemos</span><span lang="en">What We Do</span></h2>
       <p>Un equipo integral que cubre todo el proceso de la joyería fina. Desde la selección gemológica hasta la exportación a mercados premium en Asia.</p>
     </div>
     <div class="three">
       <div class="reveal">
-        <h3>Diseño</h3>
+        <h3><span lang="es">Diseño</span><span lang="en">Design</span></h3>
         <p>Creamos piezas únicas que respetan la belleza natural de la esmeralda colombiana. Cada diseño es una propuesta personalizada para el mercado objetivo.</p>
       </div>
       <div class="reveal">
-        <h3>Gemología</h3>
+        <h3><span lang="es">Gemología</span><span lang="en">Gemology</span></h3>
         <p>Certificación y análisis de calidad con estándares internacionales. Garantizamos la autenticidad y el valor de cada pieza en nuestro portafolio.</p>
       </div>
       <div class="reveal">
-        <h3>Exportación</h3>
+        <h3><span lang="es">Exportación</span><span lang="en">Export</span></h3>
         <p>Gestión completa del proceso de comercio internacional. Logística, documentación y distribución hacia los principales mercados asiáticos.</p>
       </div>
     </div>
@@ -319,8 +336,8 @@
   <!-- PIEZAS Y ESPECIFICACIONES -->
   <section id="piezas">
     <div class="sec-head reveal">
-      <h2>Piezas destacadas</h2>
-      <p>Especificaciones técnicas de nuestras colecciones principales. Cada pieza cuenta con certificación gemológica completa.</p>
+      <h2><span lang="es">Piezas destacadas</span><span lang="en">Featured Pieces</span></h2>
+      <p><span lang="es">Especificaciones</span><span lang="en">Specs</span> técnicas de nuestras colecciones principales. Cada pieza cuenta con certificación gemológica completa.</p>
     </div>
     <div class="spec">
       <dl class="reveal">
@@ -354,39 +371,39 @@
   <!-- EQUIPO -->
   <section id="equipo">
     <div class="sec-head reveal">
-      <h2>Equipo experto</h2>
+      <h2><span lang="es">Equipo experto</span><span lang="en">Expert Team</span></h2>
       <p>Profesionales con décadas de experiencia en joyería, gemología y comercio internacional.</p>
     </div>
     <div class="team">
       <div class="member reveal" data-cursor-label="Fundador">
         <span class="part">Dirección</span>
         <h3 class="who">Wilfredo Caro</h3>
-        <p class="role">Fundador y <b>Director Creativo</b></p>
+        <p class="role">Fundador y <b><span lang="es">Director Creativo</span><span lang="en">Expert</span></b></p>
       </div>
-      <div class="member reveal" data-cursor-label="Por confirmar">
+      <div class="member reveal" data-cursor-label="TBD">
         <span class="part">Gemología</span>
-        <h3 class="who tbd">Por confirmar</h3>
-        <p class="role"><b>Certificador GIA</b></p>
+        <h3 class="who tbd">TBD</h3>
+        <p class="role"><b><span lang="es">Certificador GIA</span><span lang="en">Expert</span></b></p>
       </div>
-      <div class="member reveal" data-cursor-label="Por confirmar">
+      <div class="member reveal" data-cursor-label="TBD">
         <span class="part">Diseño</span>
-        <h3 class="who tbd">Por confirmar</h3>
-        <p class="role"><b>Diseñador Joyero</b></p>
+        <h3 class="who tbd">TBD</h3>
+        <p class="role"><b><span lang="es">Diseñador Joyero</span><span lang="en">Expert</span></b></p>
       </div>
-      <div class="member reveal" data-cursor-label="Por confirmar">
+      <div class="member reveal" data-cursor-label="TBD">
         <span class="part">Atelier</span>
-        <h3 class="who tbd">Por confirmar</h3>
-        <p class="role"><b>Maestro Orfebre</b></p>
+        <h3 class="who tbd">TBD</h3>
+        <p class="role"><b><span lang="es">Maestro Orfebre</span><span lang="en">Expert</span></b></p>
       </div>
-      <div class="member reveal" data-cursor-label="Por confirmar">
+      <div class="member reveal" data-cursor-label="TBD">
         <span class="part">Comercio</span>
-        <h3 class="who tbd">Por confirmar</h3>
-        <p class="role"><b>Gestor de Exportación</b></p>
+        <h3 class="who tbd">TBD</h3>
+        <p class="role"><b><span lang="es">Gestor de Exportación</span><span lang="en">Expert</span></b></p>
       </div>
-      <div class="member reveal" data-cursor-label="Por confirmar">
+      <div class="member reveal" data-cursor-label="TBD">
         <span class="part">Mercadeo</span>
-        <h3 class="who tbd">Por confirmar</h3>
-        <p class="role"><b>Estratega de Mercados</b></p>
+        <h3 class="who tbd">TBD</h3>
+        <p class="role"><b><span lang="es">Estratega de Mercados</span><span lang="en">Expert</span></b></p>
       </div>
     </div>
   </section>
@@ -394,7 +411,7 @@
   <!-- MERCADOS ASIÁTICOS -->
   <section id="mercados">
     <div class="sec-head reveal">
-      <h2>Mercados prioritarios</h2>
+      <h2><span lang="es">Mercados prioritarios</span><span lang="en">Priority Markets</span></h2>
       <p>Nuestros principales destinos en Asia. Mercados de alto poder adquisitivo con demanda creciente de joyería fina colombiana.</p>
     </div>
     <div class="markets">
@@ -429,7 +446,7 @@
   <!-- PROCESO DE EXPORTACIÓN -->
   <section id="proceso">
     <div class="sec-head reveal">
-      <h2>Proceso de exportación</h2>
+      <h2><span lang="es">Proceso de exportación</span><span lang="en">Export Process</span></h2>
       <p>5 pasos cuidadosamente diseñados para garantizar calidad y cumplimiento en cada etapa.</p>
     </div>
     <ol class="flow">
@@ -465,7 +482,7 @@
   <section id="contacto">
     <div class="contact">
       <div class="reveal">
-        <h2>Ponte en contacto</h2>
+        <h2><span lang="es">Ponte en contacto</span><span lang="en">Get in Touch</span></h2>
         <p>Somos un equipo pequeño pero experto. Respondemos personalmente cada consulta sobre nuestras piezas y servicios de exportación.</p>
       </div>
       <div class="cardish reveal">
@@ -506,7 +523,7 @@
 
 <footer>
   <div class="page" style="display:flex;width:100%;justify-content:space-between;align-items:center">
-    <div>© 2024 Apré Fine Jewelry. Todos los derechos reservados.</div>
+    <div>© 2024 Apré Fine Jewelry. <span lang="es">Todos los derechos reservados.</span><span lang="en">All rights reserved.</span></div>
     <div class="foot-r">Made in Bogotá, Colombia</div>
   </div>
 </footer>
@@ -687,8 +704,19 @@
       });
     });
   }
+
+  /* ---------- 8. Language Switcher ---------- */
+  const langButtons = document.querySelectorAll('.lang-switch button');
+  langButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const lang = btn.dataset.lang;
+      document.body.className = lang === 'en' ? 'lang-en' : '';
+      langButtons.forEach(b => b.classList.toggle('active', b === btn));
+    });
+  });
 })();
 </script>
+
 
 <script>
 (function(){
